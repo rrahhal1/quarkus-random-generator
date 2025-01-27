@@ -93,10 +93,40 @@
       <id>openshift</id>
       <build>
         <plugins>
+        
+             <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+                <excludeDefaultDirectories>true</excludeDefaultDirectories>
+            </configuration>
+        </plugin>
+        
+        
+        
+        <plugin>
+    <groupId>org.eclipse.jkube</groupId>
+    <artifactId>openshift-maven-plugin</artifactId>
+    <version>1.5.1</version>
+    <configuration>
+        <dockerFileExclude>
+            **/.git/**
+        </dockerFileExclude>
+    </configuration>
+</plugin>
+
           <plugin>
             <groupId>org.eclipse.jkube</groupId>
             <artifactId>openshift-maven-plugin</artifactId>
             <version>${openshift-maven-plugin.version}</version>
+             <configuration>
+        <namespace>quarkus</namespace> <!-- Set to the new project -->
+        
+           <resourceTypes>
+            <resourceType>deploymentconfig</resourceType>
+        </resourceTypes>
+        
+    </configuration>
           </plugin>
         </plugins>
       </build>
