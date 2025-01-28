@@ -7,6 +7,6 @@ public class RandomGeneratorService {
   private static final UUID id = UUID.randomUUID();
 
   public RandomResponse createRandomMessage() {
-    return new RandomResponse(id.toString()+"llofdfdsfdsfdsfdsooooll");
+    return new RandomResponse(id.toString()+"--0-0-0-0---");
   }
 }
