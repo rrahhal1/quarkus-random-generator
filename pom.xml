@@ -5,11 +5,21 @@
   <groupId>com.redhatdeveloper.demos.quarkus</groupId>
   <artifactId>quarkus-random-generator</artifactId>
   <version>1.0.0-SNAPSHOT</version>
+
+  
+    <repositories>
+    <repository>
+        <id>fabric8-repo</id>
+        <url>https://repo.fabric8.io/repository/maven-public/</url>
+    </repository>
+</repositories>
+
+
   <properties>
   
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    <compiler-plugin.version>3.10.1</compiler-plugin.version>
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -40,6 +50,24 @@
       <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
     
+    <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-core -->
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-core</artifactId>
+</dependency>
+
+
+
+  <dependency>
+            <groupId>io.quarkus.platform</groupId>
+            <artifactId>quarkus-bom</artifactId>
+            <version>${quarkus.platform.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        
+    
+    
     <dependency>
     <groupId>org.jolokia</groupId>
     <artifactId>jolokia-agent-jvm</artifactId>
@@ -52,21 +80,53 @@
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <version>${quarkus.platform.version}</version>
-        <extensions>true</extensions>
-        <executions>
-          <execution>
+    
+      
+<plugin>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-maven-plugin</artifactId>
+    <version>${quarkus.platform.version}</version>
+    <executions>
+        <execution>
             <goals>
-              <goal>build</goal>
-              <goal>generate-code</goal>
-              <goal>generate-code-tests</goal>
+                <goal>build</goal> <!-- This will build the application JAR -->
             </goals>
-          </execution>
-        </executions>
-      </plugin>
+            <configuration>
+                <nativeImage>false</nativeImage> <!-- Disable native image if you're not building one -->
+                <packageType>uber-jar</packageType> <!-- This creates a fat JAR with all dependencies -->
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
+
+
+        
+<plugin>
+    <groupId>io.fabric8</groupId>
+    <artifactId>fabric8-maven-plugin</artifactId>
+    <version>3.5.0</version>
+    
+    <executions>
+                <execution>
+                    <goals>
+                        <goal>deploy</goal>
+                    </goals>
+                </execution>
+            </executions>
+            
+    <configuration>
+        <enricher>
+            <config>
+                <openshift-build>
+                    <webhookSecret>rRZ7fhdD2M5L8Hgw+uaF9ZwF5PnbkNKrZaCw4nStGhP=</webhookSecret>
+                </openshift-build>
+            </config>
+        </enricher>
+    </configuration>
+</plugin>
+      
+      
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${compiler-plugin.version}</version>
@@ -74,6 +134,11 @@
           <compilerArgs>
             <arg>-parameters</arg>
           </compilerArgs>
+          
+           <source>21</source>  <!-- Set the source version to 21 -->
+                <target>21</target>  <!-- Set the target version to 21 -->
+                
+                
         </configuration>
       </plugin>
       <plugin>
@@ -86,6 +151,21 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+      
+       <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.2.2</version>
+      <configuration>
+        <archive>
+          <manifest>
+            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            <mainClass>com.redhat.developers.demos.quarkus.Main</mainClass>
+          </manifest>
+        </archive>
+      </configuration>
+    </plugin>
+    
     </plugins>
   </build>
   <profiles>
@@ -103,6 +183,9 @@
         </plugin>
         
         
+       
+        
+        
         
         <plugin>
     <groupId>org.eclipse.jkube</groupId>
@@ -112,6 +195,10 @@
         <dockerFileExclude>
             **/.git/**
         </dockerFileExclude>
+         <buildImage>true</buildImage>
+        <imageName>quarkus-random-generator</imageName>
+        <strategy>Source</strategy>
+        <namespace>your-project-namespace</namespace> 
     </configuration>
 </plugin>
 
@@ -129,6 +216,17 @@
     </configuration>
           </plugin>
         </plugins>
+        
+        <pluginManagement>
+    <plugins>
+        <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric8-maven-plugin</artifactId>
+            <version>3.6.0</version>  <!-- Ensure you are using a valid version -->
+        </plugin>
+    </plugins>
+</pluginManagement>
+
       </build>
     </profile>
     <profile>
@@ -161,9 +259,9 @@
           </plugin>
         </plugins>
       </build>
-      <properties>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
+
     </profile>
+    
+  
   </profiles>
 </project>
