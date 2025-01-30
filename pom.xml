@@ -5,27 +5,14 @@
   <groupId>com.redhatdeveloper.demos.quarkus</groupId>
   <artifactId>quarkus-random-generator</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-
-  
-    <repositories>
-    <repository>
-        <id>fabric8-repo</id>
-        <url>https://repo.fabric8.io/repository/maven-public/</url>
-    </repository>
-</repositories>
-
-
   <properties>
-  
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <compiler-plugin.version>3.10.1</compiler-plugin.version>
+    <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.release>11</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.2.0.Final</quarkus.platform.version>
+    <quarkus.platform.version>2.6.3.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <openshift-maven-plugin.version>1.5.1</openshift-maven-plugin.version>
   </properties>
@@ -49,30 +36,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
-    
-    <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-core -->
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-core</artifactId>
-</dependency>
-
-
-
-  <dependency>
-            <groupId>io.quarkus.platform</groupId>
-            <artifactId>quarkus-bom</artifactId>
-            <version>${quarkus.platform.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        
-    
-    
-    <dependency>
-    <groupId>org.jolokia</groupId>
-    <artifactId>jolokia-agent-jvm</artifactId>
-    <version>2.1.2</version>
-</dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
@@ -80,65 +43,30 @@
   </dependencies>
   <build>
     <plugins>
-    
-      
-<plugin>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-maven-plugin</artifactId>
-    <version>${quarkus.platform.version}</version>
-    <executions>
-        <execution>
+      <plugin>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
             <goals>
-                <goal>build</goal> <!-- This will build the application JAR -->
+              <goal>build</goal>
+              <goal>generate-code</goal>
+              <goal>generate-code-tests</goal>
             </goals>
-            <configuration>
-                <nativeImage>false</nativeImage> <!-- Disable native image if you're not building one -->
-                <packageType>uber-jar</packageType> <!-- This creates a fat JAR with all dependencies -->
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
-
-
-
-        
-<plugin>
-    <groupId>io.fabric8</groupId>
-    <artifactId>fabric8-maven-plugin</artifactId>
-    <version>3.5.0</version>
-    
-    <executions>
-                <execution>
-                    <goals>
-                        <goal>deploy</goal>
-                    </goals>
-                </execution>
-            </executions>
-            
-    <configuration>
-        <enricher>
-            <config>
-                <openshift-build>
-                    <webhookSecret>rRZ7fhdD2M5L8Hgw+uaF9ZwF5PnbkNKrZaCw4nStGhP=</webhookSecret>
-                </openshift-build>
-            </config>
-        </enricher>
-    </configuration>
-</plugin>
-      
-      
-  <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.1</version>
-            <configuration>
-                <source>11</source>  <!-- or your Java version -->
-                <target>11</target>  <!-- or your Java version -->
-            </configuration>
-        </plugin>
-      
-      
-      
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${compiler-plugin.version}</version>
+        <configuration>
+          <compilerArgs>
+            <arg>-parameters</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
@@ -149,21 +77,6 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
-      
-       <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <version>3.2.2</version>
-      <configuration>
-        <archive>
-          <manifest>
-            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-            <mainClass>com.redhat.developers.demos.quarkus.Main</mainClass>
-          </manifest>
-        </archive>
-      </configuration>
-    </plugin>
-    
     </plugins>
   </build>
   <profiles>
@@ -171,60 +84,12 @@
       <id>openshift</id>
       <build>
         <plugins>
-        
-             <plugin>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>3.2.0</version>
-            <configuration>
-                <excludeDefaultDirectories>true</excludeDefaultDirectories>
-            </configuration>
-        </plugin>
-        
-        
-       
-        
-        
-        
-        <plugin>
-    <groupId>org.eclipse.jkube</groupId>
-    <artifactId>openshift-maven-plugin</artifactId>
-    <version>1.5.1</version>
-    <configuration>
-        <dockerFileExclude>
-            **/.git/**
-        </dockerFileExclude>
-         <buildImage>true</buildImage>
-        <imageName>quarkus-random-generator</imageName>
-        <strategy>Source</strategy>
-        <namespace>your-project-namespace</namespace> 
-    </configuration>
-</plugin>
-
           <plugin>
             <groupId>org.eclipse.jkube</groupId>
             <artifactId>openshift-maven-plugin</artifactId>
             <version>${openshift-maven-plugin.version}</version>
-             <configuration>
-        <namespace>quarkus</namespace> <!-- Set to the new project -->
-        
-           <resourceTypes>
-            <resourceType>deploymentconfig</resourceType>
-        </resourceTypes>
-        
-    </configuration>
           </plugin>
         </plugins>
-        
-        <pluginManagement>
-    <plugins>
-        <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>fabric8-maven-plugin</artifactId>
-            <version>3.6.0</version>  <!-- Ensure you are using a valid version -->
-        </plugin>
-    </plugins>
-</pluginManagement>
-
       </build>
     </profile>
     <profile>
@@ -257,9 +122,9 @@
           </plugin>
         </plugins>
       </build>
-
+      <properties>
+        <quarkus.package.type>native</quarkus.package.type>
+      </properties>
     </profile>
-    
-  
   </profiles>
 </project>
