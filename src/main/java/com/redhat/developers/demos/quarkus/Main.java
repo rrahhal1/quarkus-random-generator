@@ -6,7 +6,7 @@ import io.quarkus.runtime.annotations.QuarkusMain;
 @QuarkusMain
 public class Main {
     public static void main(String... args) {
-        System.out.println("Starting the Quarku   fdfdsfdfdfdsfdsfdfdfdsfdsfdfds...");
+        System.out.println("Starting the Quarku   fdsfdsfdsfdsfds...");
         Quarkus.run(args);
     }
 }
