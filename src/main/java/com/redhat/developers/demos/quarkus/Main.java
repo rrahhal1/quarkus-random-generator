@@ -6,7 +6,7 @@ import io.quarkus.runtime.annotations.QuarkusMain;
 @QuarkusMain
 public class Main {
     public static void main(String... args) {
-        System.out.println("Starting the dsdsdsdsdsadsddsadsrewressdsdsadsadsa  ...");
+        System.out.println("Starting the dsdsadsrewressdsdsadsadsa  ...");
         Quarkus.run(args);
     }
 }
