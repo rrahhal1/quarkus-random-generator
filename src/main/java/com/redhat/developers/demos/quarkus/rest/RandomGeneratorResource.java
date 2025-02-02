@@ -22,7 +22,7 @@ public class RandomGeneratorResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response handleWebhook(String payload) {
         System.out.println("Received Webhook: " + payload);
-        return Response.ok().build();  // Rerftretretertrrerrrfnffff 200 OK to GitHub
+        return Response.ok().build();  // Rerftretretertrrerrreeeffdfnffff 200 OK to GitHub
     }
 
 }
