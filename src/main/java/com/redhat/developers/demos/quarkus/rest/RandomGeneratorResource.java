@@ -10,7 +10,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/")//was random
+@Path("/webhook")//was random
 public class RandomGeneratorResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -22,7 +22,7 @@ public class RandomGeneratorResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response handleWebhook(String payload) {
         System.out.println("Received Webhook: " + payload);
-        return Response.ok().build();  // Rerftretretertrrerrreeeffdfnffff 200 OK to GitHub
+        return Response.ok().build();  //  200 OK to GitHub
     }
 
 }
