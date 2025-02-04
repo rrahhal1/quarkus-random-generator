@@ -23,7 +23,7 @@
       <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-container-image-jib</artifactId>
-        <version>${quarkus.paltform.version}</version>
+        <version>${quarkus.platform.version}</version>
       </dependency>
       <dependency>
         <groupId>${quarkus.platform.group-id}</groupId>
