@@ -1,0 +1,4 @@
+com\redhat\developers\demos\quarkus\service\RandomGeneratorService.class
+com\redhat\developers\demos\quarkus\Main.class
+com\redhat\developers\demos\quarkus\model\RandomResponse.class
+com\redhat\developers\demos\quarkus\rest\RandomGeneratorResource.class
