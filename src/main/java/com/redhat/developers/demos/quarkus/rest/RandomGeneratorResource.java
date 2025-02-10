@@ -1,5 +1,8 @@
 package com.redhat.developers.demos.quarkus.rest;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.redhat.developers.demos.quarkus.service.RandomGeneratorService;
 
 import jakarta.ws.rs.Consumes;
@@ -12,6 +15,9 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/webhook")//was random
 public class RandomGeneratorResource {
+	
+	 Logger logger=Logger.getLogger(this.getClass().getName());
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response hello() {
@@ -21,7 +27,7 @@ public class RandomGeneratorResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response handleWebhook(String payload) {
-        System.out.println("Received Webhook: " + payload);
+     logger.log(Level.FINE,"Received Webhook: " + payload);
         return Response.ok().build();  //  200 OKffffdsfdffdfddscdsdfd to GitHub
     }
 
